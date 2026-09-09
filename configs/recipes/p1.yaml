@@ -1,0 +1,11 @@
+experiment_id: P1
+split_manifest: ${ARTIFACT_ROOT}/splits/p1.json
+initial_bank_checkpoint: ${ARTIFACT_ROOT}/checkpoints/initial_bank.pt
+output_dir: ${OUTPUT_ROOT}/p1
+assignment_probes_per_task: 16
+fisher_probes_per_task: 8
+damping_validation_probes_per_task: 8
+fidelity_probes_per_task: 8
+damping_epsilons: [0.0001, 0.001, 0.01, 0.1, 1.0]
+fidelity_eta: 0.01
+

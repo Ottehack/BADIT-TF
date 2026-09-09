@@ -1,0 +1,92 @@
+recipes:
+  p0:
+    description: initialization and injection smoke
+    phases: {run: {script: experiments/runners/run_p0.py, launcher: python}}
+  p1:
+    description: Task-Fisher objective, assignment, damping and fidelity
+    phases:
+      collect: {script: experiments/runners/run_p1_collect.py, launcher: torchrun}
+      fidelity: {script: experiments/runners/run_p1_fidelity.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_p1.py, launcher: python}
+  p2:
+    description: matched multi-task TF and GG training
+    phases:
+      train: {script: experiments/runners/run_p2_train.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_p2.py, launcher: python}
+  p3:
+    description: restart-delimited continual learning
+    phases:
+      train-stage: {script: experiments/runners/run_p3_sequential.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_p3.py, launcher: python}
+  h0:
+    description: calibration sweep
+    phases:
+      prepare: {script: experiments/prepare/prepare_h0_trials.py, launcher: python}
+      fidelity: {script: experiments/runners/run_h0_fidelity.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_h0.py, launcher: python}
+  h1_h2:
+    description: one-factor and joint hyperparameter selection
+    phases:
+      multitask: {script: experiments/runners/run_p2_train.py, launcher: torchrun}
+      continual: {script: experiments/runners/run_p3_sequential.py, launcher: torchrun}
+  h3_h4:
+    description: transfer confirmation across settings and backbones
+    phases:
+      multitask: {script: experiments/runners/run_p2_train.py, launcher: torchrun}
+      continual: {script: experiments/runners/run_p3_sequential.py, launcher: torchrun}
+      aggregate-h3: {script: experiments/aggregate/aggregate_h3_confirmation.py, launcher: python}
+      aggregate-h4: {script: experiments/aggregate/aggregate_h4_transfer.py, launcher: python}
+  m0_m1:
+    description: main multi-task and continual tables
+    phases:
+      multitask: {script: experiments/runners/run_p2_train.py, launcher: torchrun}
+      continual: {script: experiments/runners/run_p3_sequential.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_m0_m1_official.py, launcher: python}
+  m2:
+    description: objective fidelity across models and assignment comparators
+    phases:
+      collect: {script: experiments/runners/run_m2_collect.py, launcher: torchrun}
+      fidelity: {script: experiments/runners/run_m2_fidelity.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_m2.py, launcher: python}
+  m3:
+    description: deployment-scale Taylor breakdown curve
+    phases:
+      run: {script: experiments/runners/run_m3_deployment_scale.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_m3_deployment_scale.py, launcher: python}
+  m4:
+    description: Task-Fisher decomposition ablation
+    phases:
+      collect: {script: experiments/runners/run_m4_collect.py, launcher: torchrun}
+      fidelity: {script: experiments/runners/run_m4_decomposition.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_m4_decomposition.py, launcher: python}
+  m5:
+    description: contiguous partition control
+    phases: {aggregate: {script: experiments/aggregate/aggregate_m5_contiguous.py, launcher: python}}
+  m6:
+    description: discovery-transfer experiment
+    phases: {prepare: {script: experiments/prepare/prepare_m6_discovery_transfer.py, launcher: python}}
+  m7:
+    description: partition stability across probes and models
+    phases:
+      collect: {script: experiments/runners/run_m7_dog_collect.py, launcher: torchrun}
+      stability: {script: experiments/runners/run_m7_partition_stability.py, launcher: python}
+      aggregate: {script: experiments/aggregate/aggregate_m7_dog_stability.py, launcher: python}
+  m8_table_ix:
+    description: expert ability and checkpoint-assignment intervention
+    phases:
+      run: {script: experiments/runners/run_m8_ability.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_m8_ability.py, launcher: python}
+  m9_table_xi:
+    description: calibration and inference cost
+    phases:
+      run: {script: experiments/runners/run_m9_throughput.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_m9_throughput.py, launcher: python}
+  table_i:
+    description: single-task controls
+    phases: {aggregate: {script: experiments/aggregate/aggregate_table_i_single_task_controls.py, launcher: python}}
+  table_vi:
+    description: no-capacity and partition ablations
+    phases:
+      fidelity: {script: experiments/runners/run_tpami_no_capacity_fidelity.py, launcher: torchrun}
+      aggregate: {script: experiments/aggregate/aggregate_tpami_table_vi_ix.py, launcher: python}
+

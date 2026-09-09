@@ -1,0 +1,28 @@
+# This file contains no machine-specific path. Override values through .env or
+# the shell; `badit-tf materialize` expands the variables before a run.
+model_name: Qwen3-4B
+model_path: ${MODEL_ROOT}/Qwen3-4B
+data_root: ${DATA_ROOT}
+output_root: ${OUTPUT_ROOT}
+artifact_root: ${ARTIFACT_ROOT}
+seed: 1
+world_size: 8
+max_sequence_length: 1024
+max_target_length: 50
+max_new_tokens: 50
+torch_dtype: bfloat16
+attention_implementation: sdpa
+target_modules:
+  - gate_proj
+num_experts: 8
+rank: 4
+lora_alpha: 32
+top_k: 4
+dense_steps: 1
+router_mode: residual_mask
+router_bias: true
+initialization_method: kaiming_zero
+svd_method: exact
+residual_implementation: paired_subtraction
+route_pooling_scope: prompt_only
+

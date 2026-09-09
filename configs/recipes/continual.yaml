@@ -1,0 +1,22 @@
+experiment_id: CONTINUAL
+setting: sequential
+sequential_manifest: ${ARTIFACT_ROOT}/splits/continual_order1_seed1.json
+official_test_manifest: ${ARTIFACT_ROOT}/splits/test.json
+tf_assignment_path: ${ARTIFACT_ROOT}/assignments/tf.json
+initial_bank_checkpoint: ${ARTIFACT_ROOT}/checkpoints/initial_bank.pt
+output_root: ${OUTPUT_ROOT}/continual
+epochs_per_task: 10
+learning_rate: 0.0002
+router_lr_multiplier: 1.0
+warmup_ratio: 0.03
+lora_dropout: 0.05
+weight_decay: 0.0
+adam_betas: [0.9, 0.999]
+adam_epsilon: 1.0e-8
+gradient_clipping: 1.0
+loss_explosion_factor: 10.0
+log_every_steps: 50
+scheduler_scope: per_task
+optimizer_scope: per_task
+primary_task_metric: rougeL
+
